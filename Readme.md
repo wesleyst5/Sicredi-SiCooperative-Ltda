@@ -90,7 +90,9 @@ Primeiro, é preciso ter uma conta na AWS (https://portal.aws.amazon.com/billing
  Ao executar o comando, será solicitado o Access Key ID, Secret access key, região e formato de saída.
 O projeto foi implementado utilizando a região us-east-2 (Ohio)
 
-`$ AWS configure`
+```sh 
+AWS configure
+```
 
 - Clonar o repositório do GitHub
 -  Provisionar a os serviços (infraestrutura) necessários para executar o projeto
