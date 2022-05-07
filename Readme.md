@@ -94,24 +94,24 @@ O projeto foi implementado utilizando a região us-east-2 (Ohio)
 
 - Clonar o repositório do GitHub
 -  Provisionar a os serviços (infraestrutura) necessários para executar o projeto
- - Acessar a pasta infrastructure\aws atráves da linha de comando e execute as instruções abaixo:
+- Acessar a pasta infrastructure\aws atráves da linha de comando e execute as instruções abaixo:
 `$ terraform init`
 `$ terraform validate`
 `$ terraform plan`
 `$ terraform apply`
 
 	***Destruir toda infraestrutura provisionada, execute o comando*** 
-	`$ terraform destroy`
+`$ terraform destroy`
 
 - Configurar o kubectl para possa se conectar ao  cluster Kubernates (Amazon EKS)
-	`$ aws eks --region us-east-2 update-kubeconfig --name sicredi-eks`
+`$ aws eks --region us-east-2 update-kubeconfig --name sicredi-eks`
 
 	***Listar os nós do cluster do AWS EKS execute a seguinte instrução:***
-	`$ kubectl get nodes`
+`$ kubectl get nodes`
 
 
 - Criar um namespace para separar os objetos ligados ao spark application 
-	`$ kubectl create namespace processing`
+`$ kubectl create namespace processing`
 
 - Atráves do gerenciador de pacotes para Kubernates Helm, execute o comando abaixo.
 Será adicionado um spark-operator, onde permitira suporte a execução de Spark applications.
@@ -130,22 +130,22 @@ Será adicionado um spark-operator, onde permitira suporte a execução de Spark
 
 
 - Criar uma conta de serviço através através do manifesto **cluster-role-binding-spark-operator-processing.yaml**
-	`$ kubectl apply -f cluster-role-binding-spark-operator-processing.yaml -n processing`
+`$ kubectl apply -f cluster-role-binding-spark-operator-processing.yaml -n processing`
 
 - Criar um secret no kubernates, que irá conter as informações de aws_access_key_id e aws_access_key para uso futuro no código .py que irá executar o processamento.
-	`kubectl create secret generic aws-credentials --from-literal=aws_access_key_id=[meukeyid] --from-literal=aws_secret_access_key=[meusecretkey] -n processing`
+`kubectl create secret generic aws-credentials --from-literal=aws_access_key_id=[meukeyid] --from-literal=aws_secret_access_key=[meusecretkey] -n processing`
 	***Subistituir [meukeyid] e [meusecretkey] pelas informações da sua conta AWS.***
 
 - Criar uma SparkApplication para executar o processamento (Ler Mysql -> Escrever no Datalake)
-	`$ kubectl apply -f spark-batch-operator-k8s-v1beta2.yaml -n processing`
+`$ kubectl apply -f spark-batch-operator-k8s-v1beta2.yaml -n processing`
 
 	**Instruições de verificação:**
-		`$ kubectl get sparkapplications -n processing`
-		`$ kubectl get pods -n processing --watch`
-		`$ kubectl logs job-pyspark-batch-driver -n processing`
+`$ kubectl get sparkapplications -n processing`
+`$ kubectl get pods -n processing --watch`
+`$ kubectl logs job-pyspark-batch-driver -n processing`
 
 	***Deletar uma uma sparkapplications***
-	`$ kubectl logs job-pyspark-batch-driver -n processing`
+`$ kubectl logs job-pyspark-batch-driver -n processing`
 
 - Conforme requisitos do projeto, chegou a hora de conferir o resultado. 
 Verificar no bucket S3 (s3://datalake-sicredi/processing/movimentacao-conta/) se o arquivo csv foi gerado.
