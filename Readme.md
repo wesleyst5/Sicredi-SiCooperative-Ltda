@@ -62,7 +62,7 @@ Foi usado Terraform como ferramenta de criação de IAC - infraestrutura como c�
 
 - **[spark-operator-processing-job-batch.py](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/kubernetes/spark/spark-operator-processing-job-batch.py)** - Código escrito em Pyspark usado no processamento (Leitura banco de dados -> escrita no Datalake em formato CSV).
 
-### kubernetes\spark \jars
+### kubernetes\spark\jars
 - **aws-java-sdk-1.7.4.jar** - Permite uso das APIs para todos os serviços AWS.
 - ~~**delta-core_2.12-1.0.0.jar** - Permite usar a camada delta lake (Não usado no projeto~~)
 - **hadoop-aws-2.7.3.jar** - Permite o suporte à integração com Amazon Web Services.
@@ -80,70 +80,81 @@ Foi usado Terraform como ferramenta de criação de IAC - infraestrutura como c�
 - DBEAVER (https://dbeaver.io/download/)
 - Terraform (https://www.terraform.io/downloads)
 - GitBash (https://git-scm.com/)
+- MySQL Client (https://www.configserverfirewall.com/ubuntu-linux/ubuntu-install-mysql-client/)
+***Obs: O proejeto foi implementado utilizando o WSL(Ubuntu) no Windows***
+![](https://i.ibb.co/6ZmST16/VSCode.png)
+> VSCode com WSL (Ubuntu) no Windows.
+
+
+
+
+
 
 ### Instruções
-Primeiro, é preciso ter uma conta na AWS (https://portal.aws.amazon.com/billing/signup#/start/email), GitHub (https://github.com/join) e DockerHub(https://hub.docker.com/) para execução dos próximos passos.
+Para iniciar a execução do projeto, será necessário possuir uma conta na AWS, (https://portal.aws.amazon.com/billing/signup#/start/email), uma conta no GitHub (https://github.com/join) e uma conta no DockerHub(https://hub.docker.com/).
 
 **Próximos passos:**
-
-- Através do client AWS-CLI na linha de comando, execute a instrução abaixo, para habilitar o acesso aos recursos da sua conta AWS.
- Ao executar o comando, será solicitado o Access Key ID, Secret access key, região e formato de saída.
-O projeto foi implementado utilizando a região us-east-2 (Ohio)
-
+- Realizar um clone do projeto do GitHub para o ambiente local usando a linha de comando **Git Bash**, em seguida abra o projeto no **VSCode**.
+```sh 
+git clone  https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda.git
+```
+- Configurar uma conta para acesso aos recursos da AWS,  através do client AWS-CLI na linha de comando no VSCode. 
+Será solicitado o Access Key ID, Secret access key, região e formato de saída.
+O projeto foi implementado utilizando a região **us-east-2** (Ohio)
+![](https://i.ibb.co/q0r11N7/AWSConfigure.png)
+> VSCode aws configure.
 ```sh 
 AWS configure
 ```
 
-- Clonar o repositório do GitHub
--  Provisionar a os serviços (infraestrutura) necessários para executar o projeto
-- Acessar a pasta infrastructure\aws atráves da linha de comando e execute as instruções abaixo:
+- Provisionar os serviços (infraestrutura) necessários para execução do projeto.
+ Acessar a pasta **infrastructure\aws** e executar os comandos abaixo para criação dos recursos na AWS:
 ```sh 
 terraform init
 terraform validate
 terraform plan
 terraform apply
 ```
+	- 	Caso necessite destruir os recursos provisionados, execute o comando **terraform destroy** 
 
-	***Destruir toda infraestrutura provisionada, execute o comando*** 
-```sh 
-terraform destroy
-```
 
-- Configurar o kubectl para que possa se conectar ao  cluster Kubernetes (Amazon EKS)
+- Após o cluster EKS chamado **sicredi-eks** ter sido provisionado através o terraform, execute o comando abaixo para configuração do acesso ao cluster via linha de comando local.
+![](https://i.ibb.co/rMXLrGQ/eks-Kubeconfig.png)
+> EKS update-kubeconfig.
 ```sh 
 aws eks --region us-east-2 update-kubeconfig --name sicredi-eks
 ```
-
 	***Listar os nós do cluster do AWS EKS execute a seguinte instrução:***
 ```sh 
 kubectl get nodes
 ```
 
-- Criar um namespace para separar os objetos ligados ao spark application 
+- Criar um namespace chamado **processing** para separar agrupar os container ligados a processamento em um unico espaço de trabalho.
 ```sh
 kubectl create namespace processing
 ```
 
-- Atráves do gerenciador de pacotes para Kubernetes Helm, execute o comando abaixo.
-Será adicionado um spark-operator, onde permitirá suporte a execução de Spark applications.
+- Criar um spark-operator (https://operatorhub.io/operator/spark-gcp) para processamento de aplicações spark, usando o gerenciador de pacotes Helm para Kubernetes, através comando abaixo:
+![](https://i.ibb.co/NZPwp7W/Helm.png)
+> Install spark-operator
 ```sh
 helm repo add spark-operator https://googlecloudplatform.github.io/spark-on-k8s-operator
 helm repo update
 helm install spark spark-operator/spark-operator -n processing
 ```
-
 	***Listar os operator e pods presentes no namespace processing***
 ```sh
 helm ls -n processing
 kubectl get pods -n processing
 ```
 
-- Criar uma imagem customizada e subir para o docker hub
+- Acessar a pasta **kubernetes/spark**, para execução de comandos que irão criar uma imagem docker customizada, contendo o código python e a infraestrutura necessária, para processamento e ingestão de dados no datalake.
 ```sh
 docker login -u [meuusername] -p [minhasenha]
 docker build -t wesleyst5/spark-operator:v3.0.0-aws .
 docker push wesleyst5/spark-operator:v3.0.0-aws
 ```
+***Colocar o usuário e senha do docker hub no comando docker login***
 
 - Criar uma conta de serviço através do manifesto **cluster-role-binding-spark-operator-processing.yaml**
 ```sh
@@ -157,11 +168,13 @@ kubectl create secret generic aws-credentials --from-literal=aws_access_key_id=[
 	***Subistituir [meukeyid] e [meusecretkey] pelas informações da sua conta AWS.***
 
 - Criar uma SparkApplication para executar o processamento (Ler Mysql -> Escrever no Datalake)
+![](https://i.ibb.co/GCW8zc2/Processamento-Job.png)
+> Processamento sparkApplication
+
 ```sh
 kubectl apply -f spark-batch-operator-k8s-v1beta2.yaml -n processing
 ```
-
-	**Instruições de verificação:**
+	**Instruções de verificação:**
 ```sh
 kubectl get sparkapplications -n processing
 kubectl get pods -n processing --watch
