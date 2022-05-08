@@ -186,6 +186,8 @@ Verificar no bucket S3 (s3://datalake-sicredi/processing/movimentacao-conta/) se
 ![](https://i.ibb.co/q7tF3s1/S3-Data-Lake.png)
 > S3 - Datalake - CSV File 
 
+![](https://i.ibb.co/hLz7WHQ/CSVFile.png)
+> CSV File 
 
 ### Dificuldades
 
