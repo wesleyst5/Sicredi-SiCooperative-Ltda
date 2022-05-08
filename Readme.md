@@ -81,14 +81,9 @@ Foi usado Terraform como ferramenta de criação de IAC - infraestrutura como c�
 - Terraform (https://www.terraform.io/downloads)
 - GitBash (https://git-scm.com/)
 - MySQL Client (https://www.configserverfirewall.com/ubuntu-linux/ubuntu-install-mysql-client/)
-***Obs: O proejeto foi implementado utilizando o WSL(Ubuntu) no Windows***
+***Obs: O projeto foi implementado utilizando o WSL(Ubuntu) no Windows***
 ![](https://i.ibb.co/6ZmST16/VSCode.png)
 > VSCode com WSL (Ubuntu) no Windows.
-
-
-
-
-
 
 ### Instruções
 Para iniciar a execução do projeto, será necessário possuir uma conta na AWS, (https://portal.aws.amazon.com/billing/signup#/start/email), uma conta no GitHub (https://github.com/join) e uma conta no DockerHub(https://hub.docker.com/).
@@ -188,6 +183,9 @@ kubectl logs job-pyspark-batch-driver -n processing
 
 - Conforme requisitos do projeto, chegou a hora de conferir o resultado. 
 Verificar no bucket S3 (s3://datalake-sicredi/processing/movimentacao-conta/) se o arquivo csv foi gerado.
+![](https://i.ibb.co/q7tF3s1/S3-Data-Lake.png)
+> S3 - Datalake - CSV File 
+
 
 ### Dificuldades
 
