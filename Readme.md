@@ -1,6 +1,6 @@
 ## Projeto
 
-Implementação de um Data Lake para a empresa SiCooperative LTDA, com objetivo de resolver problemas de agregação de diferentes informações em um único ponto, criação de relatórios individuais e apoio a nova equipe de Data Science na criação de modelos preditivos.
+Implantação de Data Lake para a empresa SiCooperative LTDA, com objetivo de ajudar o time nas atividades de agregação de diferentes informações em um único ponto, criação de relatórios individuais e apoio a nova equipe de Data Science na criação de modelos preditivos.
 
 ### Definição Estratégica:
 - Criação de um Data Lake
@@ -35,28 +35,28 @@ Implementação de um Data Lake para a empresa SiCooperative LTDA, com objetivo 
 
 ### Infrastructure\aws
 
-Foi usado Terraform como ferramenta de criação de IAC - infraestrutura como código na construção da infraestrutura de serviços necessária para implementar o projeto. 
+Foi usado Terraform como ferramenta de criação de IAC - infraestrutura como código na construção da infraestrutura de serviços necessárias para implementar o projeto. 
 
-- **[provider.tf](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/infrastructure/aws/provider.tf)** - Script que define a cloud que será utilizada no projeto..
+- **[provider.tf](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/infrastructure/aws/provider.tf)** - Responsável por definir a cloud  usado no projeto..
 
-- **[variables.tf](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/infrastructure/aws/variables.tf)** - Script que armazena as variáveis. Está sendo usado na definição do nome bucket e região usado no provisionamento dos recursos.
+- **[variables.tf](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/infrastructure/aws/variables.tf)** - Responsável por armazenar as variáveis. Usado na definição do nome bucket e região usado no provisionamento dos recursos.
 
-- **[iam.tf](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/infrastructure/aws/iam.tf)** - Script responsável por criar as políticas de segurança para acesso aos recursos no AWS. Foi criado uma role para liberar o acesso do serviço AWS EKS para o AWS S3.
+- **[iam.tf](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/infrastructure/aws/iam.tf)** - Responsável por criar as políticas de segurança para acesso aos recursos no AWS. Foi criado uma role para liberar o acesso do serviço AWS EKS para o AWS S3.
 
-- **[s3.tf](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/infrastructure/aws/s3.tf)** - Script que cria um bucket privado chamado datalake-sicredi no AWS S3. O bucket será usado como repositório de saída do processamento Spark através do SparkOperator no AWS EKS.
+- **[s3.tf](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/infrastructure/aws/s3.tf)** - Responsável por criar um bucket privado chamado datalake-sicredi no AWS S3. O bucket será usado como repositório de saída do processamento Spark através do SparkOperator no AWS EKS.
 
-- **[rds.tf](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/infrastructure/aws/rds.tf)** - Este script cria um banco de dados relacional Mysql no AWS RDS, configura acessos e permissões de rede, security groups, tipo de instância e faz a criação da estrutura com a inserção da massa de dados. (Está sendo usado a instância t3.micro, do free tier).
+- **[rds.tf](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/infrastructure/aws/rds.tf)** - Responsável por criar um banco de dados relacional Mysql no AWS RDS, configura acessos e permissões de rede, security groups, tipo de instância e faz a criação da estrutura com a inserção da massa de dados. (Foi usado a instância t3.micro, do free tier).
 
-- **[eks.tf](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/infrastructure/aws/eks.tf)** - Script reponsável por provisionar uma cluster Kubernetes através do serviço AWS EKS.
+- **[eks.tf](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/infrastructure/aws/eks.tf)** - Responsável por provisionar uma cluster Kubernetes através do serviço AWS EKS.
 
 ### Infrastructure\aws\sql
 - **[db_structure.sql](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/infrastructure/aws/sql/db_structure.sql)** - Script SQL usado no **rds.tf**, para criar e popular as tabelas do banco de dados.
 
 ### kubernetes\spark 
 
-- **[Dockerfile](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/kubernetes/spark/Dockerfile)** - Script que contem as etapas na construção de uma imagem cutomizada, a partir da imagem contendo spark-operator. Será usado no provisionamento de container que irão processar uma SparkApplication
+- **[Dockerfile](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/kubernetes/spark/Dockerfile)** - Contém as etapas de construção da imagem customizada, a partir de uma imagem spark-operator. Usado no provisionamento de container de processamento do SparkApplication
 
-- **[cluster-role-binding-spark-operator-processing.yaml](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/kubernetes/spark/cluster-role-binding-spark-operator-processing.yaml)** - Aquivo de manifesto usado na criação da conta de serviço com permissão de cluster-admin (superusuário) dentro do namespace **processing**
+- **[cluster-role-binding-spark-operator-processing.yaml](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/kubernetes/spark/cluster-role-binding-spark-operator-processing.yaml)** - Aquivo de manifesto usado para criação da conta de serviço com permissão de cluster-admin (superusuário) dentro do namespace **processing**
 
 - **[spark-batch-operator-k8s-v1beta2.yaml](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/kubernetes/spark/spark-batch-operator-k8s-v1beta2.yaml)** - Arquivo de manifesto usado para especificação de uma aplicação SparkApplication que irá executar o processamento definido no arquivo **spark-operator-processing-job-batch.py**
 
@@ -72,7 +72,7 @@ Foi usado Terraform como ferramenta de criação de IAC - infraestrutura como c�
 
 ## Executar o projeto
 
-### Pre-Requisites
+### Pré-Requisitos
 - VSCODE (https://code.visualstudio.com/download)
 - AWS-CLI (https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - KUBECTL (https://kubernetes.io/docs/tasks/tools/)
@@ -81,21 +81,21 @@ Foi usado Terraform como ferramenta de criação de IAC - infraestrutura como c�
 - Terraform (https://www.terraform.io/downloads)
 - GitBash (https://git-scm.com/)
 - MySQL Client (https://www.configserverfirewall.com/ubuntu-linux/ubuntu-install-mysql-client/)
-***Obs: O projeto foi implementado utilizando o WSL(Ubuntu) no Windows***
+***Obs: O projeto foi implementado com uso do WSL(Ubuntu) no Windows***
 ![](https://i.ibb.co/6ZmST16/VSCode.png)
 > VSCode com WSL (Ubuntu) no Windows.
 
 ### Instruções
-Para iniciar a execução do projeto, será necessário possuir uma conta na AWS, (https://portal.aws.amazon.com/billing/signup#/start/email), uma conta no GitHub (https://github.com/join) e uma conta no DockerHub(https://hub.docker.com/).
+Para iniciar a execução do projeto, é necessário conter uma conta na AWS, (https://portal.aws.amazon.com/billing/signup#/start/email), uma conta no GitHub (https://github.com/join) e uma conta no DockerHub(https://hub.docker.com/).
 
 **Próximos passos:**
-- Realizar um clone do projeto do GitHub para o ambiente local usando a linha de comando **Git Bash**, em seguida abra o projeto no **VSCode**.
+- Realizar clone do projeto do GitHub para o ambiente local com uso da linha de comando **Git Bash**, em seguida abra o projeto no **VSCode**.
 ```sh 
 git clone  https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda.git
 ```
 - Configurar uma conta para acesso aos recursos da AWS,  através do client AWS-CLI na linha de comando no VSCode. 
 Será solicitado o Access Key ID, Secret access key, região e formato de saída.
-O projeto foi implementado utilizando a região **us-east-2** (Ohio)
+O projeto foi implementado  na região **us-east-2** (Ohio)
 ![](https://i.ibb.co/q0r11N7/AWSConfigure.png)
 > VSCode aws configure.
 ```sh 
@@ -110,8 +110,7 @@ terraform validate
 terraform plan
 terraform apply
 ```
-	- 	Caso necessite destruir os recursos provisionados, execute o comando **terraform destroy** 
-
+***Se necessitar destruir os recursos provisionados, execute o comando " terraform destroy "***
 
 - Após o cluster EKS chamado **sicredi-eks** ter sido provisionado através o terraform, execute o comando abaixo para configuração do acesso ao cluster via linha de comando local.
 ![](https://i.ibb.co/rMXLrGQ/eks-Kubeconfig.png)
@@ -119,11 +118,10 @@ terraform apply
 ```sh 
 aws eks --region us-east-2 update-kubeconfig --name sicredi-eks
 ```
-	***Listar os nós do cluster do AWS EKS execute a seguinte instrução:***
+***Listar os nós do cluster do AWS EKS execute a seguinte instrução:***
 ```sh 
 kubectl get nodes
 ```
-
 - Criar um namespace chamado **processing** para separar agrupar os container ligados a processamento em um unico espaço de trabalho.
 ```sh
 kubectl create namespace processing
@@ -137,7 +135,7 @@ helm repo add spark-operator https://googlecloudplatform.github.io/spark-on-k8s-
 helm repo update
 helm install spark spark-operator/spark-operator -n processing
 ```
-	***Listar os operator e pods presentes no namespace processing***
+***Listar os operator e pods presentes no namespace processing***
 ```sh
 helm ls -n processing
 kubectl get pods -n processing
@@ -160,7 +158,7 @@ kubectl apply -f cluster-role-binding-spark-operator-processing.yaml -n processi
 ```sh
 kubectl create secret generic aws-credentials --from-literal=aws_access_key_id=[meukeyid] --from-literal=aws_secret_access_key=[meusecretkey] -n processing
 ```
-	***Subistituir [meukeyid] e [meusecretkey] pelas informações da sua conta AWS.***
+***Substituir [meukeyid] e [meusecretkey] pelas informações da sua conta AWS.***
 
 - Criar uma SparkApplication para executar o processamento (Ler Mysql -> Escrever no Datalake)
 ![](https://i.ibb.co/GCW8zc2/Processamento-Job.png)
@@ -175,8 +173,7 @@ kubectl get sparkapplications -n processing
 kubectl get pods -n processing --watch
 kubectl logs job-pyspark-batch-driver -n processing
 ```
-
-	***Deletar uma sparkapplications***
+***Deletar uma sparkapplications***
 ```sh
 kubectl logs job-pyspark-batch-driver -n processing
 ```
