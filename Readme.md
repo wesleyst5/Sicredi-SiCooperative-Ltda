@@ -37,7 +37,7 @@ Implantação de Data Lake para a empresa SiCooperative LTDA, com objetivo de aj
 
 Foi usado Terraform como ferramenta de criação de IAC - infraestrutura como código na construção da infraestrutura de serviços necessárias para implementar o projeto. 
 
-- **[provider.tf](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/infrastructure/aws/provider.tf)** - Responsável por definir a cloud  usado no projeto..
+- **[provider.tf](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/infrastructure/aws/provider.tf)** - Responsável por definir a cloud  usado no projeto.
 
 - **[variables.tf](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/infrastructure/aws/variables.tf)** - Responsável por armazenar as variáveis. Usado na definição do nome bucket e região usado no provisionamento dos recursos.
 
@@ -56,7 +56,7 @@ Foi usado Terraform como ferramenta de criação de IAC - infraestrutura como c�
 
 - **[Dockerfile](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/kubernetes/spark/Dockerfile)** - Contém as etapas de construção da imagem customizada, a partir de uma imagem spark-operator. Usado no provisionamento de container de processamento do SparkApplication
 
-- **[cluster-role-binding-spark-operator-processing.yaml](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/kubernetes/spark/cluster-role-binding-spark-operator-processing.yaml)** - Aquivo de manifesto usado para criação da conta de serviço com permissão de cluster-admin (superusuário) dentro do namespace **processing**
+- **[cluster-role-binding-spark-operator-processing.yaml](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/kubernetes/spark/cluster-role-binding-spark-operator-processing.yaml)** - Arquivo de manifesto usado para criação da conta de serviço com permissão de cluster-admin (superusuário) dentro do namespace **processing**
 
 - **[spark-batch-operator-k8s-v1beta2.yaml](https://github.com/wesleyst5/Sicredi-SiCooperative-Ltda/blob/master/kubernetes/spark/spark-batch-operator-k8s-v1beta2.yaml)** - Arquivo de manifesto usado para especificação de uma aplicação SparkApplication que irá executar o processamento definido no arquivo **spark-operator-processing-job-batch.py**
 
@@ -188,15 +188,13 @@ Verificar no bucket S3 (s3://datalake-sicredi/processing/movimentacao-conta/) se
 
 ### Dificuldades
 
-As situações que eu não havia me deparado ainda e que me tomaram mais tempo para pesquisar e solucionar foram:
-
-- Automatizar a criação de tabelas e inserção dos dados durante o provisionamento do banco de dados Mysql.
-- Funcionar a comunicação do AWS EKS e AWS S3. (Como solução foi adicionado a instrução na proriedade do SparkContext a configuração ***sc.setSystemProperty('com.amazonaws.services.s3.enableV4', 'true')***
+- Automatizar a criação de tabelas e inserções dos dados durante o provisionamento do banco de dados Mysql.
+- Estabeceler a comunicação do AWS EKS e AWS S3. (Como solução foi adicionado a instrução abaixo na proriedade do SparkContext: ***sc.setSystemProperty('com.amazonaws.services.s3.enableV4', 'true')***
 
 
 ### Com mais tempo..
 
-- Implementar e fazer o uso de integração continua, através do recurso action Workflows do GitHub.
+- Implementar e fazer o uso de integração contínua, através do recurso action Workflows do GitHub.
 - Provisionar a ferramenta Apache Airflow (gerenciamento e orquestração de fluxo) e a ferramenta Argo CD na abordagem GitOps e implantação de aplicações no Kubernetes.
 
 
