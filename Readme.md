@@ -86,7 +86,7 @@ Foi usado Terraform como ferramenta de criação de IAC - infraestrutura como c�
 > VSCode com WSL (Ubuntu) no Windows.
 
 ### Instruções
-Para iniciar a execução do projeto, é necessário conter uma conta na AWS, (https://portal.aws.amazon.com/billing/signup#/start/email), uma conta no GitHub (https://github.com/join) e uma conta no DockerHub(https://hub.docker.com/).
+Para iniciar a execução do projeto, é necessário ter uma conta na AWS, (https://portal.aws.amazon.com/billing/signup#/start/email), uma conta no GitHub (https://github.com/join) e uma conta no DockerHub(https://hub.docker.com/).
 
 **Próximos passos:**
 - Realizar clone do projeto do GitHub para o ambiente local com uso da linha de comando **Git Bash**, em seguida abra o projeto no **VSCode**.
@@ -135,7 +135,7 @@ helm repo add spark-operator https://googlecloudplatform.github.io/spark-on-k8s-
 helm repo update
 helm install spark spark-operator/spark-operator -n processing
 ```
-***Listar os operator e pods presentes no namespace processing***
+***Listar os operators e pods presentes no namespace processing***
 ```sh
 helm ls -n processing
 kubectl get pods -n processing
@@ -167,7 +167,7 @@ kubectl create secret generic aws-credentials --from-literal=aws_access_key_id=[
 ```sh
 kubectl apply -f spark-batch-operator-k8s-v1beta2.yaml -n processing
 ```
-	**Instruções de verificação:**
+**Instruções de verificação:**
 ```sh
 kubectl get sparkapplications -n processing
 kubectl get pods -n processing --watch
